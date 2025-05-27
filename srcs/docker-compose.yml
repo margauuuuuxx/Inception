@@ -7,16 +7,34 @@ secrets:
 services:
   mariadb:
     build: requirements/mariadb
+    container_name: mariadb
     secrets:
       - mysql_root_password
       - mysql_user_password
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
-  nginx:
-    build:
-    ports:
     volumes:
-  wordpress:
+      - /home/marlonco/data/mariadb:/var/lib/mysql
+    networks:
+      - inception
 
-voliumes:
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    ports:
+      - "443:443" # expose port 443 from the container to port 443 on the host (443 is for HTTPS)
+    networks:
+      - inception
+
+  wordpress: 
+    build: requirements/wordpress 
+    container_name: wordpress
+    volumes:
+      - /home/marlonco/data/wordpress:/var/www/html
+    networks:
+      - inception
+
+networks:
+  inception:
+    driver: bridge #creating a custom network using the bridge driver (= default docker network type)
