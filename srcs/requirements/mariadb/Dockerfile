@@ -15,4 +15,4 @@ COPY ./entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 
 # the cmd the container is going to run as soon as initiated 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
