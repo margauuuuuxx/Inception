@@ -19,19 +19,23 @@ services:
     networks:
       - inception
 
-  nginx:
-    build: requirements/nginx
-    container_name: nginx
-    ports:
-      - "443:443" # expose port 443 from the container to port 443 on the host (443 is for HTTPS)
-    networks:
-      - inception
-
   wordpress: 
     build: requirements/wordpress 
     container_name: wordpress
+    depends_on:
+      - mariadb # wordpress needs a database to function 
     volumes:
       - /home/marlonco/data/wordpress:/var/www/html
+    networks:
+      - inception
+
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    depends_on:
+      - wordpress # nginx proxies a request to wordpress: if no wordpress then no receiver for the request
+    ports:
+      - "443:443" # expose port 443 from the container to port 443 on the host (443 is for HTTPS)
     networks:
       - inception
 

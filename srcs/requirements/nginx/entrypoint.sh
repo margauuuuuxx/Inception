@@ -17,6 +17,8 @@ if [ ! -f /etc/ssl/certs/nginx-selfsigned.crt ]; then
     -out /etc/ssl/certs/nginx-selfsigned.crt
 fi
 
+wait-for-it.sh wordpress:9000 --timeout=30 --strict -- echo "Wordpress is ready"
+
 # -g 'daemon off;' --> overrides nginx default config to make sure that it runs in the foreground (and not background)
 # important bc otherwise it'll be daemonized (= go to the background) and the containers will exit immediately
 exec nginx -g 'daemon off;'

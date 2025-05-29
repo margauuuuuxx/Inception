@@ -18,7 +18,9 @@ RUN wget https://wordpress.org/latest.zip && \
     chown -R www-data:www-data /var/www/html 
 
 COPY ./entrypoint.sh ./
-RUN chmod +x ./entrypoint.sh
+COPY ../common/wait-for-it.sh ./
+
+RUN chmod +x ./entrypoint.sh ../common/wait-for-it.sh 
 
 EXPOSE 9000
 
