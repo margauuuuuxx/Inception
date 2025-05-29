@@ -16,7 +16,7 @@ if [ ! -f /etc/ssl/certs/nginx-selfsigned.crt ]; then
     # -newkey rsa:2048      --> creates a new 2048-bits (min recommended key size) RSA key pair
     # -keyout <>            --> path to save the private key
     # -out <>               --> path to save the certificate
-    open ssl req -x509 -nodes -days 365 \
+    openssl req -x509 -nodes -days 365 \
     -subj "/C=FR/O=42/CN=${DOMAIN_NAME}" \
     -newkey rsa:2048 \
     -keyout "$KEY" \
