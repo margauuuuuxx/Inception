@@ -15,22 +15,26 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - /home/marlonco/mariadb_data:/var/lib/mysql
     networks:
       - inception
 
   wordpress: 
-    build: requirements/wordpress 
+    build: 
+      context: ./requirements
+      dockerfile: wordpress/Dockerfile 
     container_name: wordpress
     depends_on:
       - mariadb # wordpress needs a database to function 
     volumes:
-      - wordpress_data:/var/www/html
+      - /home/marlonco/wordpress_data:/var/www/html
     networks:
       - inception
 
   nginx:
-    build: requirements/nginx
+    build:
+      context: ./requirements
+      dockerfile: nginx/Dockerfile
     container_name: nginx
     depends_on:
       - wordpress # nginx proxies a request to wordpress: if no wordpress then no receiver for the request
@@ -40,10 +44,6 @@ services:
       - DOMAIN=${DOMAIN_NAME}
     networks:
       - inception
-
-volumes:
-  - mariadb_data: /home/marlonco/mariadb_data
-  - wordpress_data: /home/marlonco/wordpress_data
 
 networks:
   inception:

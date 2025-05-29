@@ -17,11 +17,11 @@ RUN wget https://wordpress.org/latest.zip && \
     # changing files ownership to make sure that the server has all needed permissions
     chown -R www-data:www-data /var/www/html 
 
-COPY ./entrypoint.sh ./
-COPY ../common/wait-for-it.sh ./
+COPY ./wordpress/entrypoint.sh ./
+COPY ./common/wait-for-it.sh ./
 
-RUN chmod +x ./entrypoint.sh ../common/wait-for-it.sh 
+RUN chmod +x ./entrypoint.sh ./wait-for-it.sh 
 
 EXPOSE 9000
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
