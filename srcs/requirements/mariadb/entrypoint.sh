@@ -24,6 +24,9 @@ fi
 
 # Check if DB is initialized
 if [ ! -d "${MYSQL_DATA_DIR}/mysql" ]; then
+    echo "📦 Initialisation de MariaDB..."
+	mysql_install_db --user=mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal --skip-test-db
+
     echo "🚀 Starting MariaDB temporarily for initialization..."
     mysqld_safe --datadir=/var/lib/mysql &
     pid="$!"
@@ -52,4 +55,4 @@ EOF
 fi
 
 # Now start MariaDB in foreground as PID 1 so container keeps running
-exec /usr/bin/mysqld_safe --datadir=var/lib/mysql"
+exec /usr/bin/mysqld_safe --datadir=/var/lib/mysql"
