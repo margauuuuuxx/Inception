@@ -23,7 +23,9 @@ if [ ! -f /etc/ssl/certs/nginx-selfsigned.crt ]; then
     -out "$CRT"
 fi
 
-wait-for-it.sh wordpress:9000 --timeout=30 --strict -- echo "Wordpress is ready"
+# wait-for-it.sh wordpress:9000 --timeout=30 --strict -- echo "Wordpress is ready"
+
+
 
 # to be able to refer to my DOMAIN_NAME envv in my nginx conf file 
 envsubst '${DOMAIN_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf

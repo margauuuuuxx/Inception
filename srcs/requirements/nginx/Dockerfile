@@ -1,14 +1,18 @@
 FROM debian:bullseye
 WORKDIR /usr/local/bin
 
+RUN mkdir -p var/run/gninx
+
 RUN apt-get update && \
-    apt-get install -y nginx openssl && \
+    apt-get install -y nginx openssl gettext && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY ./nginx/entrypoint.sh ./
 COPY ./common/wait-for-it.sh ./
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf.template
 
 RUN chmod +x ./entrypoint.sh ./wait-for-it.sh
 

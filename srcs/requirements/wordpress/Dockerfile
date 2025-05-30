@@ -19,6 +19,8 @@ RUN wget https://wordpress.org/latest.zip && \
     # changing files ownership to make sure that the server has all needed permissions
     chown -R www-data:www-data /var/www/html 
 
+RUN ls -la /var/www/html
+
 COPY ./wordpress/entrypoint.sh ./
 COPY ./common/wait-for-it.sh ./
 
