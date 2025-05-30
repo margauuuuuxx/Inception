@@ -22,13 +22,9 @@ if [ ! -f /etc/ssl/certs/nginx-selfsigned.crt ]; then
     -keyout "$KEY" \
     -out "$CRT"
 fi
+echo "End of openssl command .."
 
 # wait-for-it.sh wordpress:9000 --timeout=30 --strict -- echo "Wordpress is ready"
-
-
-
-# to be able to refer to my DOMAIN_NAME envv in my nginx conf file 
-envsubst '${DOMAIN_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 # -g 'daemon off;' --> overrides nginx default config to make sure that it runs in the foreground (and not background)
 # important bc otherwise it'll be daemonized (= go to the background) and the containers will exit immediately

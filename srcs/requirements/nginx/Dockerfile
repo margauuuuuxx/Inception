@@ -7,12 +7,10 @@ RUN apt-get update && \
     apt-get install -y nginx openssl gettext && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
-
 COPY ./nginx/entrypoint.sh ./
 COPY ./common/wait-for-it.sh ./
 
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf.template
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/.
 
 RUN chmod +x ./entrypoint.sh ./wait-for-it.sh
 
