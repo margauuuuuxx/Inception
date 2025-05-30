@@ -4,7 +4,9 @@ WORKDIR /usr/local/bin
 # Install PHP & some PHP extensions
 RUN apt-get update && \
     apt-get install -y \
-    php php-fpm php-mysql php-mbstring php-xml php-curl php-gd php-zip wget unzip mariadb-client && \
+    php php-fpm php-mysql php-mbstring php-xml php-curl php-gd php-zip \
+    wget unzip mariadb-client && \
+    mkdir -p /run/php && \
     rm -rf /var/lib/apt/lists/*
 
 # Download & extract Wordpress

@@ -2,7 +2,7 @@ FROM debian:bullseye
 WORKDIR /usr/local/bin
 
 RUN apt-get update && \
-    apt_get install -y nginx openssl & \
+    apt-get install -y nginx openssl && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
