@@ -5,33 +5,33 @@ secrets:
     file: ../secrets/mysql_user_password.txt
 
 services:
-  # mariadb:
-  #   build: requirements/mariadb
-  #   container_name: mariadb
-  #   env_file: .env
-  #   secrets:
-  #     - mysql_root_password
-  #     - mysql_user_password
-  #   volumes:
-  #     - /home/marlonco/data/mariadb_data:/var/lib/mysql
-  #   networks:
-  #     - inception
+  mariadb:
+    build: requirements/mariadb
+    container_name: mariadb
+    env_file: .env
+    secrets:
+      - mysql_root_password
+      - mysql_user_password
+    volumes:
+      - /home/marlonco/data/mariadb_data:/var/lib/mysql
+    networks:
+      - inception
 
-  # wordpress: 
-  #   build: 
-  #     context: ./requirements
-  #     dockerfile: wordpress/Dockerfile 
-  #   container_name: wordpress
-  #   env_file: .env
-  #   secrets:
-  #     - mysql_root_password
-  #     - mysql_user_password
-  #   # depends_on:
-  #   #   - mariadb # wordpress needs a database to function 
-  #   volumes:
-  #     - /home/marlonco/data/wordpress_data:/var/www/html
-  #   networks:
-  #     - inception
+  wordpress: 
+    build: 
+      context: ./requirements
+      dockerfile: wordpress/Dockerfile 
+    container_name: wordpress
+    env_file: .env
+    secrets:
+      - mysql_root_password
+      - mysql_user_password
+    depends_on:
+      - mariadb # wordpress needs a database to function 
+    volumes:
+      - /home/marlonco/data/wordpress_data:/var/www/html
+    networks:
+      - inception
 
   nginx:
     build:
@@ -39,8 +39,8 @@ services:
       dockerfile: nginx/Dockerfile
     container_name: nginx
     env_file: .env
-    # depends_on:
-    #   - wordpress # nginx proxies a request to wordpress: if no wordpress then no receiver for the request
+    depends_on:
+      - wordpress # nginx proxies a request to wordpress: if no wordpress then no receiver for the request
     ports:
       - "443:443" # expose port 443 from the container to port 443 on the host (443 is for HTTPS)
     volumes:

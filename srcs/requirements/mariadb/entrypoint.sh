@@ -3,9 +3,53 @@
 # exit immediatly if a command exits with a non-0 status
 set -e
 
-# if the data directiry doesnt exist create it
-if [ ! -d "/var/lib/mysql/mysql" ]; then 
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql #initializes the dir
+if [ -f "/run/secrets/mysql_root_password" ]; then 
+    MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
+else 
+    echo "❌ Error: Missing MySQL root password secret"
+    exit 1
 fi
 
-exec mysqld_safe #starts the database with an extra security layer (restarts the serber in case of error)
+if [ -f "/run/secrets/mysql_user_password" ]; then 
+    MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+else 
+    echo "❌ Error: Missing MySQL user password secret"
+    exit 1
+fi
+
+# # if the data directiry doesnt exist create it
+# if [ ! -d "/var/lib/mysql/mysql" ]; then 
+#     mysql_install_db --user=mysql --datadir=/var/lib/mysql #initializes the dir
+# fi
+
+# Check if DB is initialized
+if [ ! -d "${MYSQL_DATA_DIR}/mysql" ]; then
+    echo "🚀 Starting MariaDB temporarily for initialization..."
+    mysqld_safe --datadir=/var/lib/mysql &
+    pid="$!"
+
+    echo "⏳ Waiting for MariaDB to start..."
+    until mysqladmin ping --silent; do
+        sleep 1
+    done
+
+    echo "🛠️ Initializing database..."
+    mysql -u root <<-EOF
+    CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';
+    GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+    FLUSH PRIVILEGES;
+EOF
+
+    echo "✅ Initialization complete."
+
+    # Stop the temporary MariaDB daemon
+    echo "🛑 Stopping temporary MariaDB..."
+    mysqladmin shutdown
+
+    # Wait for the daemon to really stop before continuing
+    wait "$pid" || true
+fi
+
+# Now start MariaDB in foreground as PID 1 so container keeps running
+exec /usr/bin/mysqld_safe --datadir=var/lib/mysql"
