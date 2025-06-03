@@ -17,11 +17,11 @@ else
 fi
 
 # If index.php is missing, assume wordpress is not installed in mounted volume
-if [ ! -f /var/www/html/wp-load.php ]; then
-	echo "📦 Copying WordPress core to /var/www/html (mounted volume)..."
-	cp -R /usr/src/wordpress/* /var/www/html/
-	chown -R www-data:www-data /var/www/html
-fi
+# if [ ! -f /var/www/html/wp-load.php ]; then
+# 	echo "📦 Copying WordPress core to /var/www/html (mounted volume)..."
+# 	cp -R /usr/src/wordpress/* /var/www/html/
+# 	chown -R www-data:www-data /var/www/html
+# fi
 
 # wait for mariadb
 #   --timeout=30    --> waits for 30 secs max before returning an error
@@ -33,10 +33,15 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
     cd /var/www/html
 
+	echo "⬇️ Downloading WordPress with WP-CLI..."
+	wp core download --allow-root
+
+	echo "✅ Wordpress has been succesfully  downloaded!"
+
 	echo "⚙️ Configuration of wp-config.php file ..."
 	wp config create	--dbname=${MYSQL_DATABASE} \
 						--dbuser=${MYSQL_USER} \
-						--dbpass=${DB_PASSWORD} \
+						--dbpass=${DB_USER_PASSWORD} \
 						--dbhost=${MYSQL_HOST} \
 						--allow-root
 

@@ -15,17 +15,17 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     mv wp-cli.phar /usr/local/bin/wp
 
 # Download & extract Wordpress
-RUN wget https://wordpress.org/latest.zip && \
-    unzip latest.zip && \
-    rm latest.zip && \
-    mkdir -p /var/www/html && \
-    mv wordpress/* /var/www/html/ && \
-    rmdir wordpress && \
-    # changing files ownership to make sure that the server has all needed permissions
-    chown -R www-data:www-data /var/www/html 
+# RUN wget https://wordpress.org/latest.zip && \
+#     unzip latest.zip && \
+#     rm latest.zip && \
+#     mkdir -p /var/www/html && \
+#     mv wordpress/* /var/www/html/ && \
+#     rmdir wordpress && \
+#     # changing files ownership to make sure that the server has all needed permissions
+#     chown -R www-data:www-data /var/www/html 
 
 # Save WP files for later runtime copy
-RUN mv /var/www/html /usr/src/wordpress
+# RUN mv /var/www/html /usr/src/wordpress
 
 COPY ./wordpress/www.conf /etc/php/7.4/fpm/pool.d/
 RUN mkdir -p /run/php && chown www-data:www-data /run/php
