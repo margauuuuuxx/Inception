@@ -3,6 +3,10 @@ secrets:
     file: ../secrets/mysql_root_password.txt
   mysql_user_password:
     file: ../secrets/mysql_user_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password
+  wp_user_password:
+    file: ../secrets/wp_user_password
 
 services:
   mariadb:
@@ -26,6 +30,8 @@ services:
     secrets:
       - mysql_root_password
       - mysql_user_password
+      - wp_admin_password
+      - wp_user_password
     depends_on:
       - mariadb # wordpress needs a database to function 
     volumes:

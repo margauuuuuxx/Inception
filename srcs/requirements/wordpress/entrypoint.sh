@@ -3,9 +3,23 @@
 set -e
 
 if [ -f "/run/secrets/mysql_user_password" ]; then 
-    MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+    export MYSQL_USER_PASSWORD=$(< /run/secrets/mysql_user_password)
 else 
     echo "❌ Error: Missing MySQL user password secret"
+    exit 1
+fi
+
+if [ -f "/run/secrets/wp_user_password" ]; then 
+    export WP_USER_PASSWORD=$(< /run/secrets/wp_user_password)
+else 
+    echo "❌ Error: Missing WordPress user password secret"
+    exit 1
+fi
+
+if [ -f "/run/secrets/wp_admin_password" ]; then 
+    export MYSQL_ADMIN_PASSWORD=$(< /run/secrets/wp_admin_password)
+else 
+    echo "❌ Error: Missing WordPress admin password secret"
     exit 1
 fi
 
@@ -31,14 +45,14 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 						--dbhost=${MYSQL_HOST} \
 						--allow-root
 
-	# echo "🛠 Installation du site WordPress..."
-	# wp core install		--url=${DOMAIN_NAME} \
-	# 					--title=${WP_TITLE} \
-	# 					--admin_user=${WP_ADMIN} \
-	# 					--admin_password=${WP_ADMIN_PASSWORD} \
-	# 					--admin_email=${WP_ADMIN_EMAIL} \
-	# 					--skip-email \
-	# 					--allow-root
+	echo "🛠 WordPress website installation ..."
+	wp core install		--url=${DOMAIN_NAME} \
+						--title=${WP_TITLE} \
+						--admin_user=${WP_ADMIN} \
+						--admin_password=${WP_ADMIN_PASSWORD} \
+						--admin_email=${WP_ADMIN_EMAIL} \
+						--skip-email \
+						--allow-root
 
 	# echo "👤 Création d’un utilisateur supplémentaire (auteur)..."
 	# wp user create 		${WP_USER} ${WP_USER_EMAIL} \
@@ -48,8 +62,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 else
 	echo "✅ wp-config.php déjà présent, aucune installation nécessaire."
 fi
-
-echo "ENDDDD"
 
 # use of the exec keyword --> replaces the current shell process with the proccess newly launched
 # by default in a container the first process started iks PID 1 (signa handling: SIGTERM, SIGINT, ...)
