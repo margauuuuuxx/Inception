@@ -3,13 +3,6 @@
 # exit immediatly if a command exits with a non-0 status
 set -e
 
-if [ -f "/run/secrets/mysql_root_password" ]; then 
-    export MYSQL_ROOT_PASSWORD=$(< /run/secrets/mysql_root_password)
-else 
-    echo "❌ Error: Missing MySQL root password secret"
-    exit 1
-fi
-
 if [ -f "/run/secrets/mysql_user_password" ]; then 
     export MYSQL_USER_PASSWORD=$(< /run/secrets/mysql_user_password)
 else 
@@ -18,11 +11,6 @@ else
 fi
 
 MYSQL_DATA_DIR="/var/lib/mysql/mysql"
-
-# # if the data directiry doesnt exist create it
-# if [ ! -d "/var/lib/mysql/mysql" ]; then 
-#     mysql_install_db --user=mysql --datadir=/var/lib/mysql #initializes the dir
-# fi
 
 # Check if DB is initialized
 if [ ! -d "${MYSQL_DATA_DIR}" ]; then

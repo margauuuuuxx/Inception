@@ -2,26 +2,12 @@
 
 set -e
 
-if [ -f "/run/secrets/mysql_root_password" ]; then 
-    DB_PASSWORD=$(cat /run/secrets/mysql_root_password)
-else 
-    echo "❌ Error: Missing MySQL root password secret"
-    exit 1
-fi
-
 if [ -f "/run/secrets/mysql_user_password" ]; then 
-    DB_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+    MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
 else 
     echo "❌ Error: Missing MySQL user password secret"
     exit 1
 fi
-
-# If index.php is missing, assume wordpress is not installed in mounted volume
-# if [ ! -f /var/www/html/wp-load.php ]; then
-# 	echo "📦 Copying WordPress core to /var/www/html (mounted volume)..."
-# 	cp -R /usr/src/wordpress/* /var/www/html/
-# 	chown -R www-data:www-data /var/www/html
-# fi
 
 # wait for mariadb
 #   --timeout=30    --> waits for 30 secs max before returning an error
@@ -41,7 +27,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 	echo "⚙️ Configuration of wp-config.php file ..."
 	wp config create	--dbname=${MYSQL_DATABASE} \
 						--dbuser=${MYSQL_USER} \
-						--dbpass=${DB_USER_PASSWORD} \
+						--dbpass=${MYSQL_USER_PASSWORD} \
 						--dbhost=${MYSQL_HOST} \
 						--allow-root
 
