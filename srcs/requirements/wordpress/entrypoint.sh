@@ -54,11 +54,11 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 						--skip-email \
 						--allow-root
 
-	# echo "👤 Création d’un utilisateur supplémentaire (auteur)..."
-	# wp user create 		${WP_USER} ${WP_USER_EMAIL} \
-	# 					--user_pass=${WP_USER_PASSWORD} \
-	# 					--role=author \
-	# 					--allow-root
+	echo "👤 Creation of another WordPress user .."
+	wp user create 		${WP_USER} ${WP_USER_EMAIL} \
+						--user_pass=${WP_USER_PASSWORD} \
+						--role=author \
+						--allow-root
 else
 	echo "✅ wp-config.php déjà présent, aucune installation nécessaire."
 fi
