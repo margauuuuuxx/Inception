@@ -44,8 +44,8 @@ clean:
 
 fclean: clean
 #	--> prune = clean up unused stuff 
-	docker image prune -af
-	docker volume prune -f
+	sudo rm -rf /home/marlonco/data/wordpress_data/*
+	sudo rm -rf /home/marlonco/data/mariadb_data/*
 	@echo "🔥 Removing all images and orphaned volumes..."
 
 re: fclean build up 

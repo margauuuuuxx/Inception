@@ -14,12 +14,11 @@ MYSQL_DATA_DIR="/var/lib/mysql/mysql"
 
 # Check if DB is initialized
 if [ ! -d "${MYSQL_DATA_DIR}" ]; then
-    echo "📦 Initialisation de MariaDB..."
+    echo "📦 Initialisation of MariaDB..."
 	mysql_install_db --user=mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal --skip-test-db
 
     echo "🚀 Starting MariaDB temporarily for initialization..."
     mysqld_safe --datadir=/var/lib/mysql &
-    pid="$!"
 
     echo "⏳ Waiting for MariaDB to start..."
     until mysqladmin ping --silent; do

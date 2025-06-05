@@ -17,7 +17,7 @@ else
 fi
 
 if [ -f "/run/secrets/wp_admin_password" ]; then 
-    export MYSQL_ADMIN_PASSWORD=$(< /run/secrets/wp_admin_password)
+    export WP_ADMIN_PASSWORD=$(< /run/secrets/wp_admin_password)
 else 
     echo "❌ Error: Missing WordPress admin password secret"
     exit 1

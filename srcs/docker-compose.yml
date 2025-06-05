@@ -59,4 +59,4 @@ services:
 
 networks:
   inception:
-    driver: bridge #creating a custom network using the bridge driver (= default docker network type)
+    driver: bridge #creating a custom network using the bridge driver (= default docker network type, isolated from the rest)
