@@ -20,6 +20,7 @@ services:
       - /home/marlonco/data/mariadb_data:/var/lib/mysql
     networks:
       - inception
+    restart: always
 
   wordpress: 
     build: 
@@ -38,6 +39,7 @@ services:
       - /home/marlonco/data/wordpress_data:/var/www/html
     networks:
       - inception
+    restart: always 
 
   nginx:
     build:
@@ -53,6 +55,7 @@ services:
       - /home/marlonco/data/wordpress_data:/var/www/html
     networks:
       - inception
+    restart: always 
 
 networks:
   inception:
