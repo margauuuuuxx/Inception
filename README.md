@@ -1,20 +1,6 @@
 # Inception
 
-sequenceDiagram
-    participant User
-    participant Nginx
-    participant Wordpress
-    participant MariaDB
-
-    User->>Nginx: HTTPS Request (443)
-    Nginx->>Wordpress: Proxy to Wordpress (9000)
-    Wordpress->>MariaDB: Database Query (3306)
-    MariaDB-->>Wordpress: Data Response
-    Wordpress-->>Nginx: HTML Response
-    Nginx-->>User: HTTPS Response
-
-
-***** NON MANDATORY THINGS THAT I'VE DONE *****
+## NON MANDATORY THINGS THAT I'VE DONE
     - logs specifiers in nginx conf file
     - entrypoint scripts in my servuces dockerfiles
     - use of docker secrets (used in my docker compose file)
